@@ -1,0 +1,22 @@
+{
+  "login":{
+   "header":{
+    "welcome":"Welcome to the AZKiralama & 7'den70Event Application!"
+  },
+  "input":{
+    "email":"email",
+   "password":"password"
+  },
+  "button":{
+    "rememberMe":"rememberMe",
+   
+    "save" : "Save",
+    "withoutsaving":"withoutsaving" 
+  }
+  },
+   "validation":{
+    "kvkk": "Please accept the terms of use"
+  },
+   "kvkk":"Terms of use",
+   "kvkkReadApproved":"I have read and approved the terms of use"
+}

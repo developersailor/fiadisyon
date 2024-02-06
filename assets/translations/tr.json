@@ -1,0 +1,22 @@
+{
+  "login":{
+   "header":{
+    "welcome":"AZKiralama & 7'den70Event uygulamamıza hoşgeldiniz"
+  },
+  "input":{
+    "email":"e-posta",
+   "password":"parola"
+  },
+  "button":{
+    "rememberMe":"beni hatırla",
+   
+    "save" : "hatırla",
+    "withoutsaving":"kaydetmeden" 
+  }
+  },
+  "validation":{
+    "kvkk":"Lütfen KVKK'yi kabul ediniz"
+  },
+  "kvkk":"KVKK'yı",
+  "kvkkReadApproved":"okudum ve kabul ediyorum"
+}
