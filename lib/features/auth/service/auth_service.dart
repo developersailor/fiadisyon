@@ -1,19 +1,22 @@
 import 'package:fiadisyon/features/auth/service/i_auth_service.dart';
 import 'package:fiadisyon/product/network/manager/product_service_manager.dart';
 import 'package:fiadisyon/product/network/manager/product_service_path.dart';
+import 'package:fiadisyon/product/state/container/product_state_items.dart';
 import 'package:gen/gen.dart';
 import 'package:vexana/vexana.dart';
 
 class AuthService extends IAuthService {
   AuthService();
 
-  final ProductNetworkManager _productServiceManager =
-      ProductNetworkManager.base();
+  final ProductNetworkManager _productNetworkManager =
+      ProductStateItems.productNetworkManager;
 
   @override
-  Future<AuthResponse?> changePassword(ChangePasswordRequest request) async {
+  Future<IResponseModel<AuthResponse?, EmptyModel?>?> changePassword(
+    ChangePasswordRequest request,
+  ) async {
     final response =
-        await _productServiceManager.send<AuthResponse, AuthResponse>(
+        await _productNetworkManager.send<AuthResponse, AuthResponse>(
       ProductServicePath.changePassword.value,
       parseModel: AuthResponse(),
       method: RequestType.POST,
@@ -23,14 +26,14 @@ class AuthService extends IAuthService {
         'passwordConfirmation': request.passwordConfirmation,
       },
     );
-    return response.data;
+    return response;
   }
 
   @override
-  Future<ForgotPasswordResponse?> forgotPassword(
+  Future<IResponseModel<ForgotPasswordResponse?, EmptyModel?>?> forgotPassword(
     ForgotPasswordRequest request,
   ) async {
-    final response = await _productServiceManager
+    final response = await _productNetworkManager
         .send<ForgotPasswordResponse, ForgotPasswordResponse>(
       ProductServicePath.forgotPassword.value,
       parseModel: ForgotPasswordResponse(),
@@ -39,13 +42,15 @@ class AuthService extends IAuthService {
         'email': request.email,
       },
     );
-    return response.data;
+    return response;
   }
 
   @override
-  Future<AuthResponse?> login(LoginRequest request) async {
+  Future<IResponseModel<AuthResponse?, EmptyModel?>?> login(
+    LoginRequest request,
+  ) async {
     final response =
-        await _productServiceManager.send<AuthResponse, AuthResponse>(
+        await _productNetworkManager.send<AuthResponse, AuthResponse>(
       ProductServicePath.auth.value,
       parseModel: AuthResponse(),
       method: RequestType.POST,
@@ -54,13 +59,15 @@ class AuthService extends IAuthService {
         'password': request.password,
       },
     );
-    return response.data;
+    return response;
   }
 
   @override
-  Future<AuthResponse?> register(RegisterRequest request) async {
+  Future<IResponseModel<AuthResponse?, EmptyModel?>?> register(
+    RegisterRequest request,
+  ) async {
     final response =
-        await _productServiceManager.send<AuthResponse, AuthResponse>(
+        await _productNetworkManager.send<AuthResponse, AuthResponse>(
       ProductServicePath.register.value,
       parseModel: AuthResponse(),
       method: RequestType.POST,
@@ -70,6 +77,6 @@ class AuthService extends IAuthService {
         'password': request.password,
       },
     );
-    return response.data;
+    return response;
   }
 }

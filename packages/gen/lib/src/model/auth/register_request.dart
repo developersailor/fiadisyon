@@ -17,11 +17,11 @@ part 'register_request.g.dart';
 /// This class is also responsible for deserializing the JSON response into a [RegisterRequest] object.
 class RegisterRequest extends INetworkModel<RegisterRequest> {
   /// Creates a [RegisterRequest] object.
-  RegisterRequest({
-    required this.username,
-    required this.email,
-    required this.password,
-  });
+  RegisterRequest(
+    this.username,
+    this.email,
+    this.password,
+  );
 
   factory RegisterRequest.fromJson(Map<String, dynamic> json) =>
       _$RegisterRequestFromJson(json);

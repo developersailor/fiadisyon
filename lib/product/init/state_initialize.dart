@@ -1,4 +1,5 @@
 import 'package:fiadisyon/features/auth/login/cubit/login_cubit.dart';
+import 'package:fiadisyon/features/auth/register/cubit/register_cubit.dart';
 import 'package:fiadisyon/product/state/container/product_state_items.dart';
 import 'package:fiadisyon/product/state/viewmodel/product_view_model.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +30,9 @@ class StateInitialize extends StatelessWidget {
         ),
         BlocProvider<LoginCubit>.value(
           value: ProductStateItems.loginCubit,
+        ),
+        BlocProvider<RegisterCubit>.value(
+          value: ProductStateItems.registerCubit,
         ),
       ],
       child: child,

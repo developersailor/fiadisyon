@@ -1,5 +1,6 @@
 import 'package:core/core.dart';
 import 'package:fiadisyon/features/auth/login/cubit/login_cubit.dart';
+import 'package:fiadisyon/features/auth/register/cubit/register_cubit.dart';
 import 'package:fiadisyon/product/cache/product_cache.dart';
 import 'package:fiadisyon/product/network/manager/product_service_manager.dart';
 import 'package:fiadisyon/product/state/viewmodel/product_view_model.dart';
@@ -20,6 +21,9 @@ final class ProductContainer {
       )
       ..registerLazySingleton<LoginCubit>(
         LoginCubit.new,
+      )
+      ..registerLazySingleton<RegisterCubit>(
+        RegisterCubit.new,
       );
   }
 

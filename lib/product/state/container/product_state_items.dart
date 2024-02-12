@@ -1,4 +1,5 @@
 import 'package:fiadisyon/features/auth/login/cubit/login_cubit.dart';
+import 'package:fiadisyon/features/auth/register/cubit/register_cubit.dart';
 import 'package:fiadisyon/product/cache/product_cache.dart';
 import 'package:fiadisyon/product/network/manager/product_service_manager.dart';
 import 'package:fiadisyon/product/state/container/product_state_container.dart';
@@ -17,4 +18,6 @@ final class ProductStateItems {
       ProductContainer.read<ProductViewModel>();
   static ProductCache get productCache => ProductContainer.read<ProductCache>();
   static LoginCubit get loginCubit => ProductContainer.read<LoginCubit>();
+  static RegisterCubit get registerCubit =>
+      ProductContainer.read<RegisterCubit>();
 }

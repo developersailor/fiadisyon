@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:fiadisyon/features/auth/service/auth_service.dart';
 import 'package:fiadisyon/product/state/base/base_cubit.dart';
 import 'package:gen/gen.dart';
+import 'package:vexana/vexana.dart';
 
 part 'login_state.dart';
 
@@ -24,7 +25,7 @@ class LoginCubit extends BaseCubit<LoginState> {
     emit(state.copyWith(rememberMe: value));
   }
 
-  Future<AuthResponse?> login() async {
+  Future<IResponseModel<AuthResponse?, EmptyModel?>?> login() async {
     if (state.email.isEmpty || state.password.isEmpty) {
       emit(
         state.copyWith(
@@ -32,7 +33,6 @@ class LoginCubit extends BaseCubit<LoginState> {
           errorMessage: 'Email ve şifre alanları boş olamaz',
         ),
       );
-      return null;
     }
     emit(state.copyWith(status: LoginStatus.loading));
     final response = await authService.login(
@@ -42,17 +42,7 @@ class LoginCubit extends BaseCubit<LoginState> {
       ),
     );
 
-    if (response != null) {
-      emit(state.copyWith(status: LoginStatus.success));
-      return response;
-    } else {
-      emit(
-        state.copyWith(
-          status: LoginStatus.failure,
-          errorMessage: 'Giriş başarısız',
-        ),
-      );
-      return null;
-    }
+    emit(state.copyWith(status: LoginStatus.success));
+    return response;
   }
 }

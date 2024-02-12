@@ -1,16 +1,15 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:fiadisyon/features/auth/login/cubit/login_cubit.dart';
 import 'package:fiadisyon/product/cache/model/token_cache_model.dart';
+import 'package:fiadisyon/product/cache/product_cache.dart';
 import 'package:fiadisyon/product/navigation/app_router.gr.dart';
+import 'package:fiadisyon/product/network/exception/auth_error.dart';
 import 'package:fiadisyon/product/state/base/base_state.dart';
 import 'package:fiadisyon/product/state/container/product_state_items.dart';
-import 'package:fiadisyon/product/widget/checkbox/kvkk_checkbox.dart';
+import 'package:fiadisyon/product/widget/button/product_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fiadisyon/features/auth/login/cubit/login_cubit.dart';
-import 'package:fiadisyon/product/cache/product_cache.dart';
-import 'package:fiadisyon/product/widget/button/product_button.dart';
 
-@RoutePage()
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
 
@@ -21,8 +20,6 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends BaseState<LoginView> {
   late final LoginCubit _loginCubit;
   late final ProductCache _productCache;
-  final GlobalKey<FormState> _formKey = GlobalKey();
-  final _autovalidateMode = AutovalidateMode.onUserInteraction;
 
   @override
   void initState() {
@@ -31,7 +28,7 @@ class _LoginViewState extends BaseState<LoginView> {
     _productCache = ProductStateItems.productCache;
     // token cache olarak tutulduğunda login aşaması başlamadan önce token cache kontrol edilir.
     if (_productCache.tokenCacheOperation.get('fiskindal') != null) {
-      context.router.replace(const MainRoute());
+      context.router.popAndPush(const MainRoute());
     }
   }
 
@@ -42,7 +39,7 @@ class _LoginViewState extends BaseState<LoginView> {
       child: BlocConsumer<LoginCubit, LoginState>(
         listener: (context, state) {
           if (state.status == LoginStatus.success) {
-            context.router.replace(const MainRoute());
+            context.router.popAndPush(const MainRoute());
           }
         },
         builder: (context, state) {
@@ -54,50 +51,70 @@ class _LoginViewState extends BaseState<LoginView> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Form(
-                    key: _formKey,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    child: Column(
-                      children: [
-                        TextField(
-                          onChanged: (value) {
-                            _loginCubit.emailChanged(value);
-                          },
-                          decoration: const InputDecoration(
-                            hintText: 'Email',
-                          ),
+                  Column(
+                    children: [
+                      TextField(
+                        onChanged: (value) {
+                          _loginCubit.emailChanged(value);
+                        },
+                        decoration: const InputDecoration(
+                          hintText: 'Email',
                         ),
-                        TextField(
-                          onChanged: (value) {
-                            _loginCubit.passwordChanged(value);
-                          },
-                          decoration: const InputDecoration(
-                            hintText: 'Password',
-                          ),
+                      ),
+                      TextField(
+                        onChanged: (value) {
+                          _loginCubit.passwordChanged(value);
+                        },
+                        decoration: const InputDecoration(
+                          hintText: 'Password',
                         ),
-                        Checkbox(
-                          value: state.rememberMe,
-                          onChanged: (value) {
-                            _loginCubit.rememberMeChanged(value: value);
-                          },
-                        ),
-                        //KvkkCheckBox(_autovalidateMode),
-                        ProductButton(
-                          onPressed: () async {
-                            final data = await _loginCubit.login();
-                            if (data != null) {
-                              _productCache.tokenCacheOperation
-                                  .add(TokenCacheModel(token: data));
+                      ),
+                      Checkbox(
+                        value: state.rememberMe,
+                        onChanged: (value) {
+                          _loginCubit.rememberMeChanged(value: value);
+                        },
+                        semanticLabel: 'Remember me',
+                      ),
+                      //KvkkCheckBox(_autovalidateMode),
+                      ProductButton(
+                        onPressed: () async {
+                          final response = await _loginCubit.login();
+                          if (response?.error != null) {
+                            if (response?.error is AuthError) {
+                              if (!context.mounted) return;
+                              showBottomSheet<void>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Container(
+                                    height: 200,
+                                    color: Colors.amber,
+                                    child: Center(
+                                      child: Text(
+                                        (response!.error! as AuthError).name,
+                                        style: const TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 24,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
                             }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor:
-                                Theme.of(context).colorScheme.onSurface,
-                          ),
-                          child: const Text('Giriş yap'),
+                          }
+                          if (response?.data != null) {
+                            _productCache.tokenCacheOperation
+                                .add(TokenCacheModel(token: response!.data!));
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor:
+                              Theme.of(context).colorScheme.onSurface,
                         ),
-                      ],
-                    ),
+                        child: const Text('Giriş yap'),
+                      ),
+                    ],
                   ),
                 ],
               ),

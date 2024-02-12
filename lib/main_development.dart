@@ -1,9 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fiadisyon/product/init/application_initialize.dart';
 import 'package:fiadisyon/product/init/product_localization.dart';
 import 'package:fiadisyon/product/init/state_initialize.dart';
 import 'package:fiadisyon/product/navigation/app_router.dart';
 import 'package:fiadisyon/product/state/viewmodel/product_view_model.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';

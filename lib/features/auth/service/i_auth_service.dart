@@ -1,8 +1,17 @@
 import 'package:gen/gen.dart';
+import 'package:vexana/vexana.dart';
 
 abstract class IAuthService {
-  Future<AuthResponse?> login(LoginRequest request);
-  Future<AuthResponse?> register(RegisterRequest request);
-  Future<ForgotPasswordResponse?> forgotPassword(ForgotPasswordRequest request);
-  Future<AuthResponse?> changePassword(ChangePasswordRequest request);
+  Future<IResponseModel<AuthResponse?, EmptyModel?>?> login(
+    LoginRequest request,
+  );
+  Future<IResponseModel<AuthResponse?, EmptyModel?>?> register(
+    RegisterRequest request,
+  );
+  Future<IResponseModel<ForgotPasswordResponse?, EmptyModel?>?> forgotPassword(
+    ForgotPasswordRequest request,
+  );
+  Future<IResponseModel<AuthResponse?, EmptyModel?>?> changePassword(
+    ChangePasswordRequest request,
+  );
 }
