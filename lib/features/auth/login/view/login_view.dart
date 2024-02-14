@@ -3,7 +3,6 @@ import 'package:fiadisyon/features/auth/login/cubit/login_cubit.dart';
 import 'package:fiadisyon/product/cache/model/token_cache_model.dart';
 import 'package:fiadisyon/product/cache/product_cache.dart';
 import 'package:fiadisyon/product/navigation/app_router.gr.dart';
-import 'package:fiadisyon/product/network/exception/auth_error.dart';
 import 'package:fiadisyon/product/state/base/base_state.dart';
 import 'package:fiadisyon/product/state/container/product_state_items.dart';
 import 'package:fiadisyon/product/widget/button/product_button.dart';
@@ -80,32 +79,14 @@ class _LoginViewState extends BaseState<LoginView> {
                       ProductButton(
                         onPressed: () async {
                           final response = await _loginCubit.login();
-                          if (response?.error != null) {
-                            if (response?.error is AuthError) {
-                              if (!context.mounted) return;
-                              showBottomSheet<void>(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return Container(
-                                    height: 200,
-                                    color: Colors.amber,
-                                    child: Center(
-                                      child: Text(
-                                        (response!.error! as AuthError).name,
-                                        style: const TextStyle(
-                                          color: Colors.red,
-                                          fontSize: 24,
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
-                              );
-                            }
-                          }
-                          if (response?.data != null) {
-                            _productCache.tokenCacheOperation
-                                .add(TokenCacheModel(token: response!.data!));
+                          if (response != null) {
+                            _productCache.tokenCacheOperation.add(
+                              TokenCacheModel(
+                                token: response,
+                              ),
+                            );
+                            if (!context.mounted) return;
+                            await context.router.popAndPush(const MainRoute());
                           }
                         },
                         style: ElevatedButton.styleFrom(

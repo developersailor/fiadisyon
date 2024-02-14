@@ -12,7 +12,7 @@ class AuthService extends IAuthService {
       ProductStateItems.productNetworkManager;
 
   @override
-  Future<IResponseModel<AuthResponse?, EmptyModel?>?> changePassword(
+  Future<AuthResponse?> changePassword(
     ChangePasswordRequest request,
   ) async {
     final response =
@@ -26,11 +26,11 @@ class AuthService extends IAuthService {
         'passwordConfirmation': request.passwordConfirmation,
       },
     );
-    return response;
+    return response.data;
   }
 
   @override
-  Future<IResponseModel<ForgotPasswordResponse?, EmptyModel?>?> forgotPassword(
+  Future<ForgotPasswordResponse?> forgotPassword(
     ForgotPasswordRequest request,
   ) async {
     final response = await _productNetworkManager
@@ -42,11 +42,11 @@ class AuthService extends IAuthService {
         'email': request.email,
       },
     );
-    return response;
+    return response.data;
   }
 
   @override
-  Future<IResponseModel<AuthResponse?, EmptyModel?>?> login(
+  Future<AuthResponse?> login(
     LoginRequest request,
   ) async {
     final response =
@@ -59,11 +59,11 @@ class AuthService extends IAuthService {
         'password': request.password,
       },
     );
-    return response;
+    return response.data;
   }
 
   @override
-  Future<IResponseModel<AuthResponse?, EmptyModel?>?> register(
+  Future<AuthResponse?> register(
     RegisterRequest request,
   ) async {
     final response =
@@ -77,6 +77,6 @@ class AuthService extends IAuthService {
         'password': request.password,
       },
     );
-    return response;
+    return response.data;
   }
 }

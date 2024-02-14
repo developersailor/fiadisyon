@@ -25,7 +25,7 @@ class LoginCubit extends BaseCubit<LoginState> {
     emit(state.copyWith(rememberMe: value));
   }
 
-  Future<IResponseModel<AuthResponse?, EmptyModel?>?> login() async {
+  Future<AuthResponse?> login() async {
     if (state.email.isEmpty || state.password.isEmpty) {
       emit(
         state.copyWith(
@@ -35,7 +35,7 @@ class LoginCubit extends BaseCubit<LoginState> {
       );
     }
     emit(state.copyWith(status: LoginStatus.loading));
-    final response = await authService.login(
+    final data = await authService.login(
       LoginRequest(
         state.email,
         state.password,
@@ -43,6 +43,6 @@ class LoginCubit extends BaseCubit<LoginState> {
     );
 
     emit(state.copyWith(status: LoginStatus.success));
-    return response;
+    return data;
   }
 }

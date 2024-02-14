@@ -40,7 +40,7 @@ class RegisterCubit extends BaseCubit<RegisterState> {
       return null;
     }
     emit(state.copyWith(status: RegisterStatus.loading));
-    final response = await authService.register(
+    final data = await authService.register(
       RegisterRequest(
         state.username,
         state.email,
@@ -53,6 +53,6 @@ class RegisterCubit extends BaseCubit<RegisterState> {
         status: RegisterStatus.success,
       ),
     );
-    return response?.data;
+    return data;
   }
 }
