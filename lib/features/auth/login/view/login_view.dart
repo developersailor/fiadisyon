@@ -79,12 +79,25 @@ class _LoginViewState extends BaseState<LoginView> {
                       ProductButton(
                         onPressed: () async {
                           final response = await _loginCubit.login();
-                          if (response != null) {
-                            _productCache.tokenCacheOperation.add(
-                              TokenCacheModel(
-                                token: response,
-                              ),
-                            );
+                          try {
+                            if (response != null) {
+                              _productCache.tokenCacheOperation.add(
+                                TokenCacheModel(
+                                  token: response,
+                                ),
+                              );
+                            } else if (response == null) {
+                              if (!context.mounted) return;
+                              showErrorMessage(
+                                context,
+                                'Token alınamadı',
+                              );
+                            }
+                          } catch (e) {
+                            if (!context.mounted) return;
+                            showErrorMessage(context, e.toString());
+                          }
+                          if (response?.user != null) {
                             if (!context.mounted) return;
                             await context.router.popAndPush(const MainRoute());
                           }
@@ -105,4 +118,19 @@ class _LoginViewState extends BaseState<LoginView> {
       ),
     );
   }
+}
+
+Widget showErrorMessage(BuildContext context, String message) {
+  return AlertDialog(
+    title: const Text('Error'),
+    content: Text(message),
+    actions: <Widget>[
+      TextButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: const Text('OK'),
+      ),
+    ],
+  );
 }

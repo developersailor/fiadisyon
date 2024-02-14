@@ -1,21 +1,39 @@
-enum AuthError {
-  unauthorized(401),
-  invalidCredentials(40),
-  userNotFound(404),
-  unknownError(400);
+import 'package:vexana/vexana.dart';
 
-  const AuthError(this.statusCode);
-  final int statusCode;
+enum AuthError {
+  unauthorized,
+  invalidCredentials,
+  userNotFound,
+  unknownError;
+
+  String get name {
+    switch (this) {
+      case AuthError.unauthorized:
+        return 'Unauthorized';
+      case AuthError.invalidCredentials:
+        return 'Invalid Credentials';
+      case AuthError.userNotFound:
+        return 'User Not Found';
+      case AuthError.unknownError:
+        return 'Unknown Error';
+    }
+  }
+}
+
+class AuthErrorException extends DioException {
+  AuthErrorException({required this.statusCode, required super.requestOptions});
+
+  final int? statusCode;
   static AuthError fromStatusCode(int statusCode) {
     switch (statusCode) {
       case 401:
-        return unauthorized;
+        return AuthError.unauthorized;
       case 400:
-        return invalidCredentials;
+        return AuthError.invalidCredentials;
       case 404:
-        return userNotFound;
+        return AuthError.userNotFound;
       default:
-        return unknownError;
+        return AuthError.unknownError;
     }
   }
 }

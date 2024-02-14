@@ -1,9 +1,11 @@
 import 'package:fiadisyon/features/auth/service/i_auth_service.dart';
+import 'package:fiadisyon/product/network/exception/auth_error.dart';
 import 'package:fiadisyon/product/network/manager/product_service_manager.dart';
 import 'package:fiadisyon/product/network/manager/product_service_path.dart';
 import 'package:fiadisyon/product/state/container/product_state_items.dart';
 import 'package:gen/gen.dart';
 import 'package:vexana/vexana.dart';
+import 'package:fiadisyon/product/network/manager/product_network_error_manager.dart';
 
 class AuthService extends IAuthService {
   AuthService();
@@ -59,7 +61,14 @@ class AuthService extends IAuthService {
         'password': request.password,
       },
     );
-    return response.data;
+    try {
+      return response.data;
+    } on AuthErrorException catch (e) {
+      throw AuthErrorException(
+        statusCode: e.statusCode,
+        requestOptions: e.requestOptions,
+      );
+    }
   }
 
   @override
