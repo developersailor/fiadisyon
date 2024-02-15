@@ -29,7 +29,7 @@ dependencies:
   google_fonts: ^6.1.0
   kartal: ^3.5.0
   logger: ^2.0.2+1
-  syncfusion_flutter_pdfviewer: ^24.2.3
+  syncfusion_flutter_pdfviewer: ^24.2.6
   theme:
     path: packages/theme
   vexana: ^3.5.4
