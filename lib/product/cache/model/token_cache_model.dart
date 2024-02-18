@@ -5,7 +5,7 @@ import 'package:kartal/kartal.dart';
 final class TokenCacheModel with CacheModel {
   TokenCacheModel({required this.token});
   TokenCacheModel.empty() : token = AuthResponse();
-  final AuthResponse token;
+  final AuthResponse? token;
   @override
   TokenCacheModel fromDynamicJson(dynamic json) {
     final jsonMap = json as Map<String, dynamic>?;
@@ -23,8 +23,8 @@ final class TokenCacheModel with CacheModel {
   }
 
   @override
-  Map<String, dynamic> toJson() {
-    return token.toJson();
+  Map<String, dynamic>? toJson() {
+    return token?.toJson();
   }
 
   TokenCacheModel copyWith({
@@ -37,5 +37,5 @@ final class TokenCacheModel with CacheModel {
 
   @override
   // TODO: implement id
-  String get id => token.user?.username ?? '';
+  String get id => token?.user?.username ?? '';
 }

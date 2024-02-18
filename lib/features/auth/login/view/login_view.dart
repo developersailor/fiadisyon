@@ -19,13 +19,18 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends BaseState<LoginView> {
   late final LoginCubit _loginCubit;
   late final ProductCache _productCache;
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   void initState() {
     super.initState();
     _loginCubit = ProductStateItems.loginCubit;
     _productCache = ProductStateItems.productCache;
-    // token cache olarak tutulduğunda login aşaması başlamadan önce token cache kontrol edilir.
     if (_productCache.tokenCacheOperation.get('fiskindal') != null) {
       context.router.popAndPush(const MainRoute());
     }
@@ -37,7 +42,9 @@ class _LoginViewState extends BaseState<LoginView> {
       create: (context) => _loginCubit,
       child: BlocConsumer<LoginCubit, LoginState>(
         listener: (context, state) {
-          if (state.status == LoginStatus.success) {
+          if (state.status.isFailure) {
+            showErrorMessage(context, state.errorMessage);
+          } else if (state.status.isSuccess) {
             context.router.popAndPush(const MainRoute());
           }
         },
@@ -54,7 +61,7 @@ class _LoginViewState extends BaseState<LoginView> {
                     children: [
                       TextField(
                         onChanged: (value) {
-                          _loginCubit.emailChanged(value);
+                          emailController.text = value;
                         },
                         decoration: const InputDecoration(
                           hintText: 'Email',
@@ -62,7 +69,7 @@ class _LoginViewState extends BaseState<LoginView> {
                       ),
                       TextField(
                         onChanged: (value) {
-                          _loginCubit.passwordChanged(value);
+                          passwordController.text = value;
                         },
                         decoration: const InputDecoration(
                           hintText: 'Password',
@@ -78,26 +85,19 @@ class _LoginViewState extends BaseState<LoginView> {
                       //KvkkCheckBox(_autovalidateMode),
                       ProductButton(
                         onPressed: () async {
-                          final response = await _loginCubit.login();
-                          try {
-                            if (response != null) {
+                          final response = await _loginCubit.login(
+                            emailController.text,
+                            passwordController.text,
+                          );
+                          if (response?.authResponse != null) {
+                            final tokenCacheModel = TokenCacheModel(
+                              token: response?.authResponse,
+                            );
+                            if (state.rememberMe == true) {
                               _productCache.tokenCacheOperation.add(
-                                TokenCacheModel(
-                                  token: response,
-                                ),
-                              );
-                            } else if (response == null) {
-                              if (!context.mounted) return;
-                              showErrorMessage(
-                                context,
-                                'Token alınamadı',
+                                tokenCacheModel,
                               );
                             }
-                          } catch (e) {
-                            if (!context.mounted) return;
-                            showErrorMessage(context, e.toString());
-                          }
-                          if (response?.user != null) {
                             if (!context.mounted) return;
                             await context.router.popAndPush(const MainRoute());
                           }

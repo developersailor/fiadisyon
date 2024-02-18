@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Proje dizini
-project_dir="/Users/mehmetfiskindal/Developer/fiadisyon"
+project_dir="/Users/mehmetfiskindal/project/fiadisyon"
 
 # Modül dizini
-module_dir="/Users/mehmetfiskindal/Developer/fiadisyon/packages/gen"
+module_dir="/Users/mehmetfiskindal/project/fiadisyon/packages/gen"
 
 # Proje için build_runner çalıştırma fonksiyonu
 run_build_runner_in_project() {

@@ -1,17 +1,33 @@
 import 'package:gen/gen.dart';
 import 'package:vexana/vexana.dart';
 
+final class AuthData {
+  AuthData(this.authResponse, this.statusCode);
+  final AuthResponse? authResponse;
+  final int? statusCode;
+}
+
+typedef AuthResponseWithStatusCode = AuthData;
+
+final class ForgoPasswordData {
+  ForgoPasswordData(this.forgotPasswordResponse, this.statusCode);
+  final ForgotPasswordResponse? forgotPasswordResponse;
+  final int? statusCode;
+}
+
+typedef ForgotPasswordResponseWithStatusCode = ForgoPasswordData;
+
 abstract class IAuthService {
-  Future<AuthResponse?> login(
+  Future<AuthResponseWithStatusCode?> login(
     LoginRequest request,
   );
-  Future<AuthResponse?> register(
+  Future<AuthResponseWithStatusCode?> register(
     RegisterRequest request,
   );
-  Future<ForgotPasswordResponse?> forgotPassword(
+  Future<ForgotPasswordResponseWithStatusCode?> forgotPassword(
     ForgotPasswordRequest request,
   );
-  Future<AuthResponse?> changePassword(
+  Future<AuthResponseWithStatusCode?> changePassword(
     ChangePasswordRequest request,
   );
 }

@@ -1,5 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:fiadisyon/features/auth/login/cubit/login_cubit.dart';
 import 'package:fiadisyon/features/auth/register/cubit/register_cubit.dart';
+import 'package:fiadisyon/product/navigation/app_router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -27,7 +29,7 @@ class RegisterForm extends StatelessWidget {
       child: BlocConsumer<RegisterCubit, RegisterState>(
         listener: (context, state) {
           if (state.status == RegisterStatus.success) {
-            Navigator.of(context).pop();
+            context.router.popAndPush(const MainRoute());
           }
         },
         builder: (context, state) {
@@ -70,7 +72,10 @@ class RegisterForm extends StatelessWidget {
                           if (!context.mounted) return;
                           final loginCubit = context.read<LoginCubit>();
 
-                          await loginCubit.login();
+                          await loginCubit.login(
+                            state.email,
+                            state.password,
+                          );
                         }
                       },
                       child: const Text('Register'),

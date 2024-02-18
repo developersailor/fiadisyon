@@ -6,6 +6,7 @@ enum AuthError {
   userNotFound,
   unknownError;
 
+// hata kodu gelirse parametre olarak alınan statusCode'a göre hangi hata olduğu belirlenir.
   String get name {
     switch (this) {
       case AuthError.unauthorized:
@@ -18,12 +19,7 @@ enum AuthError {
         return 'Unknown Error';
     }
   }
-}
 
-class AuthErrorException extends DioException {
-  AuthErrorException({required this.statusCode, required super.requestOptions});
-
-  final int? statusCode;
   static AuthError fromStatusCode(int statusCode) {
     switch (statusCode) {
       case 401:
@@ -35,5 +31,15 @@ class AuthErrorException extends DioException {
       default:
         return AuthError.unknownError;
     }
+  }
+}
+
+class AuthErrorException implements Exception {
+  AuthErrorException({this.statusCode, this.requestOptions});
+  final RequestOptions? requestOptions;
+  final int? statusCode;
+  @override
+  String toString() {
+    return 'AuthErrorException: ${AuthError.fromStatusCode(statusCode!)}';
   }
 }

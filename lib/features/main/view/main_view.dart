@@ -35,9 +35,7 @@ class _MainViewState extends State<MainView> {
             ElevatedButton(
               onPressed: () {
                 //clear token and navigate to login
-                setState(() {
-                  ProductStateItems.productCache.tokenCacheOperation.clear();
-                });
+                ProductStateItems.productCache.tokenCacheOperation.clear();
                 context.router.pop();
               },
               child: const Text('Logout'),

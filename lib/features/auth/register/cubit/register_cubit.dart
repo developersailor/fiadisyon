@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:fiadisyon/features/auth/service/auth_service.dart';
+import 'package:fiadisyon/features/auth/service/i_auth_service.dart';
 import 'package:fiadisyon/product/state/base/base_cubit.dart';
 import 'package:gen/gen.dart';
 
@@ -26,7 +27,7 @@ class RegisterCubit extends BaseCubit<RegisterState> {
     emit(state.copyWith(username: value));
   }
 
-  Future<AuthResponse?> register() async {
+  Future<AuthResponseWithStatusCode?> register() async {
     if (state.email.isEmpty ||
         state.password.isEmpty ||
         state.username.isEmpty ||

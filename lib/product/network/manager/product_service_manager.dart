@@ -12,10 +12,7 @@ final class ProductNetworkManager extends NetworkManager<EmptyModel> {
             baseUrl: AppEnvironmentItems.baseUrl.value,
             // ignore: lines_longer_than_80_chars
             headers: {
-              //baerer token
               HttpHeaders.contentTypeHeader: 'application/json',
-              HttpHeaders.authorizationHeader:
-                  'Bearer ${AppEnvironmentItems.apiKey.value}',
             },
           ),
         );

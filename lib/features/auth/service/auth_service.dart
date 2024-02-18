@@ -5,16 +5,15 @@ import 'package:fiadisyon/product/network/manager/product_service_path.dart';
 import 'package:fiadisyon/product/state/container/product_state_items.dart';
 import 'package:gen/gen.dart';
 import 'package:vexana/vexana.dart';
-import 'package:fiadisyon/product/network/manager/product_network_error_manager.dart';
 
-class AuthService extends IAuthService {
+final class AuthService extends IAuthService {
   AuthService();
 
   final ProductNetworkManager _productNetworkManager =
       ProductStateItems.productNetworkManager;
 
   @override
-  Future<AuthResponse?> changePassword(
+  Future<AuthResponseWithStatusCode?> changePassword(
     ChangePasswordRequest request,
   ) async {
     final response =
@@ -28,11 +27,22 @@ class AuthService extends IAuthService {
         'passwordConfirmation': request.passwordConfirmation,
       },
     );
-    return response.data;
+
+    try {
+      return AuthResponseWithStatusCode(
+        response.data,
+        response.error?.statusCode,
+      );
+    } on AuthErrorException catch (e) {
+      throw AuthErrorException(
+        statusCode: e.statusCode,
+        requestOptions: e.requestOptions,
+      );
+    }
   }
 
   @override
-  Future<ForgotPasswordResponse?> forgotPassword(
+  Future<ForgotPasswordResponseWithStatusCode?> forgotPassword(
     ForgotPasswordRequest request,
   ) async {
     final response = await _productNetworkManager
@@ -44,11 +54,22 @@ class AuthService extends IAuthService {
         'email': request.email,
       },
     );
-    return response.data;
+
+    try {
+      return ForgotPasswordResponseWithStatusCode(
+        response.data,
+        response.error?.statusCode,
+      );
+    } on AuthErrorException catch (e) {
+      throw AuthErrorException(
+        statusCode: e.statusCode,
+        requestOptions: e.requestOptions,
+      );
+    }
   }
 
   @override
-  Future<AuthResponse?> login(
+  Future<AuthResponseWithStatusCode> login(
     LoginRequest request,
   ) async {
     final response =
@@ -61,8 +82,12 @@ class AuthService extends IAuthService {
         'password': request.password,
       },
     );
+
     try {
-      return response.data;
+      return AuthResponseWithStatusCode(
+        response.data,
+        response.error?.statusCode,
+      );
     } on AuthErrorException catch (e) {
       throw AuthErrorException(
         statusCode: e.statusCode,
@@ -72,7 +97,7 @@ class AuthService extends IAuthService {
   }
 
   @override
-  Future<AuthResponse?> register(
+  Future<AuthResponseWithStatusCode?> register(
     RegisterRequest request,
   ) async {
     final response =
@@ -86,6 +111,17 @@ class AuthService extends IAuthService {
         'password': request.password,
       },
     );
-    return response.data;
+
+    try {
+      return AuthResponseWithStatusCode(
+        response.data,
+        response.error?.statusCode,
+      );
+    } on AuthErrorException catch (e) {
+      throw AuthErrorException(
+        statusCode: e.statusCode,
+        requestOptions: e.requestOptions,
+      );
+    }
   }
 }

@@ -7,5 +7,5 @@ mixin CacheModel {
   CacheModel fromDynamicJson(dynamic json);
 
   /// Converts the cache model to JSON.
-  Map<String, dynamic> toJson();
+  Map<String, dynamic>? toJson();
 }
