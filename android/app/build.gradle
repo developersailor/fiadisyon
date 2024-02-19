@@ -49,7 +49,7 @@ android {
 
     defaultConfig {
         // Default app configuration
-        applicationId "com.fiskindal.fiadisyon  "
+        applicationId "com.fiskindal.fiadisyon"
         minSdkVersion 23
         targetSdkVersion 34
         versionCode flutterVersionCode.toInteger()
