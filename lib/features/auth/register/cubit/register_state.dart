@@ -17,6 +17,8 @@ class RegisterState extends Equatable {
     this.status = RegisterStatus.initial,
     this.errorMessage = '',
     this.passwordConfirmation = '',
+    this.rememberMe,
+    this.authResponse,
   });
 
   final String email;
@@ -25,6 +27,8 @@ class RegisterState extends Equatable {
   final RegisterStatus status;
   final String errorMessage;
   final String passwordConfirmation;
+  final bool? rememberMe;
+  final AuthResponseWithStatusCode? authResponse;
 
   RegisterState copyWith({
     String? email,
@@ -33,6 +37,8 @@ class RegisterState extends Equatable {
     RegisterStatus? status,
     String? errorMessage,
     String? passwordConfirmation,
+    bool? rememberMe,
+    AuthResponseWithStatusCode? authResponse,
   }) {
     return RegisterState(
       email: email ?? this.email,
@@ -41,6 +47,8 @@ class RegisterState extends Equatable {
       status: status ?? this.status,
       errorMessage: errorMessage ?? this.errorMessage,
       passwordConfirmation: passwordConfirmation ?? this.passwordConfirmation,
+      rememberMe: rememberMe ?? this.rememberMe,
+      authResponse: authResponse ?? this.authResponse,
     );
   }
 
@@ -52,5 +60,7 @@ class RegisterState extends Equatable {
         status,
         errorMessage,
         passwordConfirmation,
+        rememberMe,
+        authResponse,
       ];
 }

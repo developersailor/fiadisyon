@@ -1,3 +1,4 @@
+import 'package:fiadisyon/features/auth/forgotpassword/cubit/forgot_password_cubit.dart';
 import 'package:fiadisyon/features/auth/login/cubit/login_cubit.dart';
 import 'package:fiadisyon/features/auth/register/cubit/register_cubit.dart';
 import 'package:fiadisyon/product/cache/product_cache.dart';
@@ -20,4 +21,6 @@ final class ProductStateItems {
   static LoginCubit get loginCubit => ProductContainer.read<LoginCubit>();
   static RegisterCubit get registerCubit =>
       ProductContainer.read<RegisterCubit>();
+  static ForgotPasswordCubit get forgotPasswordCubit =>
+      ProductContainer.read<ForgotPasswordCubit>();
 }

@@ -1,4 +1,5 @@
 import 'package:core/core.dart';
+import 'package:fiadisyon/features/auth/forgotpassword/cubit/forgot_password_cubit.dart';
 import 'package:fiadisyon/features/auth/login/cubit/login_cubit.dart';
 import 'package:fiadisyon/features/auth/register/cubit/register_cubit.dart';
 import 'package:fiadisyon/product/cache/product_cache.dart';
@@ -24,6 +25,9 @@ final class ProductContainer {
       )
       ..registerLazySingleton<RegisterCubit>(
         RegisterCubit.new,
+      )
+      ..registerLazySingleton<ForgotPasswordCubit>(
+        ForgotPasswordCubit.new,
       );
   }
 

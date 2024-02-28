@@ -6,6 +6,7 @@ import 'package:fiadisyon/product/navigation/app_router.gr.dart';
 import 'package:fiadisyon/product/state/base/base_state.dart';
 import 'package:fiadisyon/product/state/container/product_state_items.dart';
 import 'package:fiadisyon/product/widget/button/product_button.dart';
+import 'package:fiadisyon/product/widget/error/show_error_message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -13,7 +14,7 @@ class LoginView extends StatefulWidget {
   const LoginView({super.key});
 
   @override
-  _LoginViewState createState() => _LoginViewState();
+  State<LoginView> createState() => _LoginViewState();
 }
 
 class _LoginViewState extends BaseState<LoginView> {
@@ -31,9 +32,6 @@ class _LoginViewState extends BaseState<LoginView> {
     super.initState();
     _loginCubit = ProductStateItems.loginCubit;
     _productCache = ProductStateItems.productCache;
-    if (_productCache.tokenCacheOperation.get('fiskindal') != null) {
-      context.router.popAndPush(const MainRoute());
-    }
   }
 
   @override
@@ -44,8 +42,6 @@ class _LoginViewState extends BaseState<LoginView> {
         listener: (context, state) {
           if (state.status.isFailure) {
             showErrorMessage(context, state.errorMessage);
-          } else if (state.status.isSuccess) {
-            context.router.popAndPush(const MainRoute());
           }
         },
         builder: (context, state) {
@@ -75,16 +71,28 @@ class _LoginViewState extends BaseState<LoginView> {
                           hintText: 'Password',
                         ),
                       ),
-                      Checkbox(
-                        value: state.rememberMe,
-                        onChanged: (value) {
-                          _loginCubit.rememberMeChanged(value: value);
-                        },
-                        semanticLabel: 'Remember me',
+                      Row(
+                        children: [
+                          Checkbox(
+                            value: state.rememberMe,
+                            onChanged: (value) {
+                              _loginCubit.rememberMeChanged(value: value);
+                            },
+                            semanticLabel: 'Remember me',
+                          ),
+                          const Text('Remember me'),
+                        ],
                       ),
                       //KvkkCheckBox(_autovalidateMode),
                       ProductButton(
                         onPressed: () async {
+                          if (_productCache.tokenCacheOperation
+                                  .get('fiskindal')
+                                  ?.token !=
+                              null) {
+                            await context.router.popAndPush(const MainRoute());
+                            return;
+                          }
                           final response = await _loginCubit.login(
                             emailController.text,
                             passwordController.text,
@@ -118,19 +126,4 @@ class _LoginViewState extends BaseState<LoginView> {
       ),
     );
   }
-}
-
-Widget showErrorMessage(BuildContext context, String message) {
-  return AlertDialog(
-    title: const Text('Error'),
-    content: Text(message),
-    actions: <Widget>[
-      TextButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        child: const Text('OK'),
-      ),
-    ],
-  );
 }

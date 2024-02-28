@@ -26,7 +26,7 @@ class LoginState extends Equatable {
   final String errorMessage;
   final bool kvkkChecked;
   final bool rememberMe;
-  final AuthResponse? authResponse;
+  final AuthResponseWithStatusCode? authResponse;
 
   LoginState copyWith({
     String? email,
@@ -35,7 +35,7 @@ class LoginState extends Equatable {
     String? errorMessage,
     bool? kvkkChecked,
     bool? rememberMe,
-    AuthResponse? authResponse,
+    AuthResponseWithStatusCode? authResponse,
   }) {
     return LoginState(
       email: email ?? this.email,

@@ -5,9 +5,14 @@ import 'package:fiadisyon/product/navigation/app_router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class RegisterView extends StatelessWidget {
+class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
 
+  @override
+  State<RegisterView> createState() => _RegisterViewState();
+}
+
+class _RegisterViewState extends State<RegisterView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,13 +24,18 @@ class RegisterView extends StatelessWidget {
   }
 }
 
-class RegisterForm extends StatelessWidget {
+class RegisterForm extends StatefulWidget {
   const RegisterForm({super.key});
 
   @override
+  State<RegisterForm> createState() => _RegisterFormState();
+}
+
+class _RegisterFormState extends State<RegisterForm> {
+  @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => RegisterCubit(),
+      create: (context) => context.read<RegisterCubit>(),
       child: BlocConsumer<RegisterCubit, RegisterState>(
         listener: (context, state) {
           if (state.status == RegisterStatus.success) {
@@ -40,18 +50,24 @@ class RegisterForm extends StatelessWidget {
                 children: [
                   TextFormField(
                     decoration: const InputDecoration(labelText: 'Username'),
-                    onChanged: (value) =>
-                        context.read<RegisterCubit>().usernameChanged(value),
+                    onChanged: (value) => context
+                        .read<RegisterCubit>()
+                        .usernameController
+                        .text = value,
                   ),
                   TextFormField(
                     decoration: const InputDecoration(labelText: 'Email'),
-                    onChanged: (value) =>
-                        context.read<RegisterCubit>().emailChanged(value),
+                    onChanged: (value) => context
+                        .read<RegisterCubit>()
+                        .emailController
+                        .text = value,
                   ),
                   TextFormField(
                     decoration: const InputDecoration(labelText: 'Password'),
-                    onChanged: (value) =>
-                        context.read<RegisterCubit>().passwordChanged(value),
+                    onChanged: (value) => context
+                        .read<RegisterCubit>()
+                        .passwordController
+                        .text = value,
                   ),
                   TextFormField(
                     decoration: const InputDecoration(
@@ -59,7 +75,8 @@ class RegisterForm extends StatelessWidget {
                     ),
                     onChanged: (value) => context
                         .read<RegisterCubit>()
-                        .passwordConfirmationChanged(value),
+                        .passwordConfirmationController
+                        .text = value,
                   ),
                   if (state.status == RegisterStatus.loading)
                     const CircularProgressIndicator()

@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:fiadisyon/features/auth/service/auth_service.dart';
 import 'package:fiadisyon/features/auth/service/i_auth_service.dart';
 import 'package:fiadisyon/product/state/base/base_cubit.dart';
+import 'package:flutter/material.dart';
 import 'package:gen/gen.dart';
 
 part 'register_state.dart';
@@ -10,50 +11,52 @@ class RegisterCubit extends BaseCubit<RegisterState> {
   RegisterCubit() : super(const RegisterState());
 
   final AuthService authService = AuthService();
-
-  void emailChanged(String value) {
-    emit(state.copyWith(email: value));
-  }
-
-  void passwordChanged(String value) {
-    emit(state.copyWith(password: value));
-  }
-
-  void passwordConfirmationChanged(String value) {
-    emit(state.copyWith(passwordConfirmation: value));
-  }
-
-  void usernameChanged(String value) {
-    emit(state.copyWith(username: value));
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordConfirmationController =
+      TextEditingController();
+  void rememberMeChanged({bool? value}) {
+    final newState = state.copyWith(rememberMe: value);
+    emit(newState);
   }
 
   Future<AuthResponseWithStatusCode?> register() async {
-    if (state.email.isEmpty ||
-        state.password.isEmpty ||
-        state.username.isEmpty ||
-        state.passwordConfirmation.isEmpty) {
+    final email = emailController.text;
+    final password = passwordController.text;
+    final username = usernameController.text;
+    final passwordConfirmation = passwordConfirmationController.text;
+    emit(state.copyWith(status: RegisterStatus.loading));
+    if (email.isEmpty ||
+        password.isEmpty ||
+        username.isEmpty ||
+        passwordConfirmation.isEmpty) {
       emit(
         state.copyWith(
           status: RegisterStatus.failure,
-          errorMessage: 'Tüm alanlar doldurulmalıdır',
+          errorMessage:
+              'Email, password, username or password confirmation cannot be empty',
         ),
       );
       return null;
     }
-    emit(state.copyWith(status: RegisterStatus.loading));
     final data = await authService.register(
       RegisterRequest(
-        state.username,
-        state.email,
-        state.password,
+        username,
+        email,
+        password,
       ),
     );
-
-    emit(
-      state.copyWith(
-        status: RegisterStatus.success,
-      ),
-    );
+    if (data?.authResponse == null) {
+      emit(
+        state.copyWith(
+          status: RegisterStatus.failure,
+          errorMessage: 'An error occurred',
+        ),
+      );
+      return null;
+    }
+    emit(state.copyWith(status: RegisterStatus.success));
     return data;
   }
 }

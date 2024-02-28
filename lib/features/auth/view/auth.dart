@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:fiadisyon/features/auth/forgotpassword/view/forgot_password_view.dart';
 import 'package:fiadisyon/features/auth/login/view/login_view.dart';
 import 'package:fiadisyon/features/auth/register/view/register_view.dart';
 import 'package:flutter/material.dart';
@@ -10,14 +11,14 @@ class AuthView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2, //3,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           bottom: const TabBar(
             tabs: [
               Tab(text: 'Login'),
               Tab(text: 'Register'),
-              //Tab(text: 'Forgot Password'),
+              Tab(text: 'Forgot Password'),
             ],
           ),
         ),
@@ -25,7 +26,7 @@ class AuthView extends StatelessWidget {
           children: [
             LoginView(),
             RegisterView(),
-            //ForgotPasswordView(),
+            ForgotPasswordView(),
           ],
         ),
       ),
