@@ -28,7 +28,7 @@ dependencies:
   get_it: ^7.6.6
   google_fonts: ^6.1.0
   kartal: ^3.5.0
-  logger: ^2.0.2+1
+  logger: ^2.2.0
   syncfusion_flutter_pdfviewer: ^24.2.3
   theme:
     path: packages/theme
